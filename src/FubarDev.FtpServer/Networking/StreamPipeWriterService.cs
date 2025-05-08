@@ -73,7 +73,7 @@ namespace FubarDev.FtpServer.Networking
                     await SendDataToStream(readResult.Buffer, CancellationToken.None)
                        .ConfigureAwait(false);
                 }
-                catch (SocketException ex) when (ex.SocketErrorCode == SocketError.ConnectionReset)
+                catch (IOException ex) when (ex.InnerException is SocketException { SocketErrorCode: SocketError.ConnectionReset })
                 {
                     Logger?.LogDebug(ex, "Sending data failed. The remote peer closed the connection.");
                     return;
